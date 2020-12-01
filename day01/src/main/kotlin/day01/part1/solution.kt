@@ -10,8 +10,8 @@ import kotlin.streams.toList
  */
 fun part1(input: BufferedReader): Any {
   val expenses = input.lines().map { it.toInt() }.sorted().toList()
-  val(left,right) = expenses.takeLastWhile { it >= 1000 }.map { cost ->
+  val (left, right) = expenses.takeLastWhile { it >= 1000 }.map { cost ->
     cost to expenses.takeWhile { it >= (2020 - cost) }.firstOrNull { it + cost == 2020 }
   }.first { it.second != null }
-  return left*(right ?: error("no Solution"))
+  return left * (right ?: error("no Solution"))
 }
