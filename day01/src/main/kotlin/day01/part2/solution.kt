@@ -12,7 +12,10 @@ fun part2(input: BufferedReader): Any {
   val minValue = expenses.first()
   val (left, middle, right) = expenses.takeLastWhile { it >= 674 }.map { cost ->
     val value = expenses.takeWhile { it <= (2020 - cost - minValue) }.map { second ->
-      second to expenses.takeWhile { it <= (2020 - cost - second) }.firstOrNull { it + cost + second == 2020 }
+      second to expenses
+        .dropWhile { it < second } // avoid double work
+        .takeWhile { it <= (2020 - cost - second) }
+        .firstOrNull { it + cost + second == 2020 }
     }.firstOrNull { it.second != null }
     Triple(cost, value?.first, value?.second)
   }.first { it.third != null }
