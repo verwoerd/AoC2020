@@ -1,5 +1,6 @@
 package day03.part1
 
+import toInt
 import java.io.BufferedReader
 
 /**
@@ -9,9 +10,7 @@ import java.io.BufferedReader
 fun part1(input: BufferedReader): Any {
   val lines = input.readLines()
   val width = lines.first().length
-  var x = 0
-  return lines.drop(1).count {
-    x += 3
-    it[x.rem(width)] == '#'
-  }
+  return lines.drop(1).fold(0 to 0) { (x, trees), value ->
+    (x + 3).let { it to trees + (value[it.rem(width)] == '#').toInt() }
+  }.second
 }
