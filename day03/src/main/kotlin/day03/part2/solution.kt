@@ -18,6 +18,6 @@ fun part2(input: BufferedReader): Any {
 }
 
 fun List<String>.countTrees(right: Int, down: Int = 1) =
-  filterIndexed { index, _ -> index.rem(down) == 0 }.foldIndexed(0) { index, trees, value ->
-    trees + (value[(index * right).rem(value.length)] == '#').toInt()
+  filterIndexed { index, _ -> index % down == 0 }.foldIndexed(0) { index, trees, value ->
+    trees + (value[(index * right) % value.length] == '#').toInt()
   }

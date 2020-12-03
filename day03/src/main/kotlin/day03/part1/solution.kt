@@ -10,6 +10,6 @@ import java.io.BufferedReader
 fun part1(input: BufferedReader): Any {
   val lines = input.readLines()
   return lines.foldIndexed(0) { index, trees, value ->
-    trees + (value[(index * 3).rem(value.length)] == '#').toInt()
+    trees + (value[(index * 3) % value.length] == '#').toInt()
   }
 }
