@@ -20,5 +20,5 @@ fun part2(input: BufferedReader): Any {
 
 fun List<String>.countTrees(width: Int, right: Int, down: Int = 1) =
   drop(down).filterIndexed { index, _ -> index.rem(down) == 0 }.fold(0 to 0L) { (x, trees), value ->
-    (x + right).let { it to trees+(value[it.rem(width)] == '#').toInt() }
+    (x + right).let { it to trees + (value[it.rem(width)] == '#').toInt() }
   }.second
