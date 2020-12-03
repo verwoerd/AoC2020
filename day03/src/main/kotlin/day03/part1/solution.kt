@@ -9,8 +9,7 @@ import java.io.BufferedReader
  */
 fun part1(input: BufferedReader): Any {
   val lines = input.readLines()
-  val width = lines.first().length
-  return lines.drop(1).fold(0 to 0) { (x, trees), value ->
-    (x + 3).let { it to trees + (value[it.rem(width)] == '#').toInt() }
-  }.second
+  return lines.foldIndexed(0) { index, trees, value ->
+    trees + (value[(index * 3).rem(value.length)] == '#').toInt()
+  }
 }
