@@ -11,12 +11,14 @@ fun part1(input: BufferedReader): Any {
   return parseLines(input).count { it.isValid() }
 }
 
-fun parseLines(input: BufferedReader) = input.readLines().flatMap { it.split(' ') }.joinToString("") {
-  when {
-    it.isBlank() -> "\n"
-    else -> "$it "
+fun parseLines(input: BufferedReader) = input.lineSequence()
+  .runningFold(Passport()) { current, line ->
+    when {
+      line.isBlank() -> Passport()
+      current.isValid() -> Passport() // corner case where cid is on a separate line, but passport is already valid
+      else -> readPassport(line,current)
+    }
   }
-}.split('\n').map { it.trim() }.map { readPassport(it) }
 
 data class Passport(
   val byr: String = "",
@@ -29,8 +31,8 @@ data class Passport(
   val cid: String = ""
                    ) {
   companion object {
-    fun readPassport(line: String): Passport =
-      line.split(" ").map { it.split(":").take(2) }.fold(Passport()) { passport, (name, value) ->
+    fun readPassport(line: String, start: Passport= Passport()): Passport =
+      line.split(" ").map { it.split(":").take(2) }.fold(start) { passport, (name, value) ->
         when (name) {
           "byr" -> passport.copy(byr = value)
           "iyr" -> passport.copy(iyr = value)
