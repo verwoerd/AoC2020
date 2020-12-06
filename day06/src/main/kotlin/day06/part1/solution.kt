@@ -7,10 +7,10 @@ import java.io.BufferedReader
  * @since 06/12/2020
  */
 fun part1(input: BufferedReader): Any {
-  return input.lineSequence().fold(mutableSetOf<Char>() to 0) { (seen, count), current ->
+  return input.lineSequence().fold(emptySet<Char>() to 0) { (seen, count), current ->
     when {
-      current.isEmpty() -> mutableSetOf<Char>() to count + seen.size
-      else -> seen.also { it.addAll(current.asSequence()) } to count
+      current.isEmpty() -> emptySet<Char>() to count + seen.size
+      else -> seen.union(current.asIterable()) to count
     }
   }.let { (seen, count) -> count + seen.size }
 }
