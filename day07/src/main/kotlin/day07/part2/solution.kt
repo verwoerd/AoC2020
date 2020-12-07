@@ -11,7 +11,6 @@ fun part2(input: BufferedReader): Any {
   return input.lineSequence().map(Bag.Companion::parseLine).associateBy { it.color }.findCount("shiny gold") - 1
 }
 
-
 fun Map<String, Bag>.findCount(color: String): Int =
   get(color)!!.contents.takeIf { it.isNotEmpty() }?.map { (key, value) -> value * findCount(key) }?.sum()?.inc() ?: 1
 

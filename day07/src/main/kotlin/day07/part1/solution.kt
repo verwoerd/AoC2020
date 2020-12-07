@@ -1,7 +1,6 @@
 package day07.part1
 
 import java.io.BufferedReader
-import java.util.LinkedList
 
 /**
  * @author verwoerd
@@ -12,15 +11,11 @@ fun part1(input: BufferedReader): Any {
     input.lineSequence().map(Bag.Companion::parseLine).fold(mutableMapOf<String, MutableSet<String>>()) { acc, bag ->
       bag.contents.map { acc.getOrPut(it.key, { mutableSetOf() }).add(bag.color) }.let { acc }
     }.withDefault { mutableSetOf() }
-
-  val queue = LinkedList<String>().also { it.add("shiny gold") }
-  val seen = mutableSetOf<String>()
-  while (queue.isNotEmpty()) {
-    val current = queue.pop()
-    bags.getValue(current).filter { seen.add(it) }.toCollection(queue)
-  }
-  return seen.size
+  return bags.getParents("shiny gold").count()
 }
+
+fun Map<String,MutableSet<String>>.getParents(current: String, seen: Set<String> = emptySet()): Set<String> =
+  seen union getValue(current).filter { it !in seen }.flatMap { getParents(it, seen + it) }
 
 val baseRegex = Regex("^(?<color>[\\w ]+) bags contain (?<contents>.+)\\.$")
 val contentRegex = Regex(" ?(?<count>\\d+) (?<color>[\\w ]+)")
@@ -44,4 +39,3 @@ data class Bag(
     }
   }
 }
-
