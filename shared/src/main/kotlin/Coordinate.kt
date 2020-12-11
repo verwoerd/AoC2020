@@ -33,7 +33,9 @@ val manhattanOriginComparator = Comparator { a: Coordinate, b: Coordinate ->
                                                   )
 }
 
-fun <V> Map<Coordinate, V>.yRange() = keys.minByOrNull { it.y }?.y to keys.maxByOrNull { it.y }?.y
+fun <V> Map<Coordinate, V>.range() = CoordinateRange(xRange().asRange(), yRange().asRange())
+
+fun <V> Map<Coordinate, V>.yRange() = keys.minByOrNull { it.y }!!.y to keys.maxByOrNull { it.y }!!.y
 
 fun <V> Map<Coordinate, V>.xRange() = keys.minByOrNull { it.x }!!.x to keys.maxByOrNull { it.x }!!.x
 
@@ -54,3 +56,13 @@ fun adjacentCircularCoordinates(origin: Coordinate) = sequenceOf(
   Coordinate(origin.x, origin.y + 1),
   Coordinate(origin.x, origin.y - 1)
                                                                 )
+
+fun Pair<Int, Int>.asRange() = (first..second)
+
+data class CoordinateRange(
+  val xRange: IntRange,
+  val yRange: IntRange
+                          ) {
+  operator fun contains(coordinate: Coordinate) =
+    coordinate.x in xRange && coordinate.y in yRange
+}
