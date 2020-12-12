@@ -28,21 +28,32 @@ fun readInput(input: BufferedReader) = input.lineSequence().flatMapIndexed { y, 
 }.toMap()
 
 fun Map<Coordinate, Char>.doChairDance(range: CoordinateRange): Map<Coordinate, Char> {
+  // For all y values in the current map
   return range.yRange.flatMap { y ->
+    // For all x values in the current map
     range.xRange.map { x ->
-      Coordinate(x, y) to when {
-        get(Coordinate(x, y)) == '.' -> '.'
-        else -> adjacentCircularCoordinates(Coordinate(x, y))
-          .filter { it in range }
-          .map { getValue(it) }.count { it == '#' }.let {
-            when (it) {
-              0 -> '#'
-              in 1..3 -> getValue(Coordinate(x, y))
-              else -> 'L'
-            }
-          }
-      }
+      // Construct the coordinate key for the current coordinate
+      Coordinate(x, y)
+        .let { current ->
+          // create a pair based of the coordinate and the new value based on the adjacent seat rules
+          current to
+              when (val content = getValue(current)) {
+                '.' -> '.' // spots with no seats don't need ot be considered
+                else -> adjacentCircularCoordinates(current)  // get all seats adjacent to the current one
+                  .filter { it in range } // only consider seats in range of the current grid
+                  .map { getValue(it) } // get the current value of the adjacent seat
+                  .count { it == '#' } // count the number of seats that are occupied
+                  .let {
+                    when (it) {
+                      0 -> '#'    // if no one is sitting around, someone will sit down
+                      in 1..3 -> content // if less then 4 people around, don't change the state
+                      else -> 'L' // 4 or more, the seat will be empty
+                    }
+                  }
+              }
+        }
     }
+    // And put it together in a map
   }.toMap()
 }
 
