@@ -17,5 +17,5 @@ fun part1(input: BufferedReader): Any {
       -1 -> 0
       else -> turn - value
     }.also { memory[last] = turn } to turn + 1
-  }.takeWhile { it.also { println(it) }.second <= 2020 }.last().first
+  }.takeWhile { it.second <= 2020 }.last().first
 }
