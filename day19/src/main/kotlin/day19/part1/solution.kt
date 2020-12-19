@@ -7,7 +7,6 @@
 package day19.part1
 
 import java.io.BufferedReader
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * @author verwoerd
@@ -37,23 +36,20 @@ fun BufferedReader.readInput(): Pair<Map<Int, String>, List<String>> {
   return ruleList.toMap() to lines
 }
 
-val cache = ConcurrentHashMap<Int, String>()
+val cache = mutableMapOf<Int, String>()
 
 fun Map<Int, String>.calculate(key: Int): String {
-  if (cache[key] == null) {
-    val entry = get(key) ?: error("Unknown rule: $key")
-    cache[key] = when {
-      entry.startsWith("\"") -> entry.drop(1).take(1)
-      else -> entry.split(" ").joinToString("") {
-        // build a regex string
-        when (it) {
-          "|" -> "|"
-          "+" -> "+" // only for part 2
-          "" -> ""
-          else -> "(${calculate(it.toInt())})"
-        }
+  val result = cache[key]
+  if (result != null) return result
+  val entry = get(key) ?: error("Unknown rule: $key")
+  return when {
+    entry.startsWith("\"") -> entry.drop(1).take(1)
+    else -> entry.split(" ").joinToString("") {
+      // build a regex string
+      when (it) {
+        "|", "+", "" -> it
+        else -> "(${calculate(it.toInt())})"
       }
     }
-  }
-  return cache[key]!!
+  }.also { cache[key] = it }
 }
