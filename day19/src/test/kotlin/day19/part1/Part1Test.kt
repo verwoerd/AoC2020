@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2020 Keystone Strategic b.v.
- *
- * All rights reserved.
- */
-
 package day19.part1
 
 import ExampleTest
