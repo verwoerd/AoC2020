@@ -24,3 +24,5 @@ fun <T> priorityQueueOf(comparator: Comparator<T>, vararg args: T): PriorityQueu
   queue.addAll(args)
   return queue
 }
+
+fun <K, V> Iterable<Pair<K, V>>.groupByPair() = groupBy({ it.first }) { it.second }
